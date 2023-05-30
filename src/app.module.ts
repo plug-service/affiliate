@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { NotificationModule } from './module/notification/notification.module';
-import { EmailModule } from './module/email/email.module';
+import { ReferralCodeModule } from './module/refferal-code/refferal-code.module';
 
 function loadModules(): Array<any> {
   const importModule = [
@@ -10,23 +9,11 @@ function loadModules(): Array<any> {
       isGlobal: true,
       envFilePath: '.env',
     }),
-    EmailModule,
+    ReferralCodeModule,
+    MongooseModule.forRoot(
+      `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
+    ),
   ];
-
-  const isLoadNotificationModule =
-    process.env.ENABLE_MODULE_NOTIFICATION?.toLocaleLowerCase()?.trim() ===
-    'true';
-
-  if (isLoadNotificationModule) {
-    importModule.push(
-      ...[
-        NotificationModule,
-        MongooseModule.forRoot(
-          `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
-        ),
-      ],
-    );
-  }
 
   return importModule;
 }
