@@ -8,10 +8,13 @@ export enum ReferralCodeStatus {
 
 @Schema()
 export class ReferralCode {
-  @Prop()
+  @Prop({
+    type: String,
+  })
   code: string;
 
   @Prop({
+    type: String,
     default: ReferralCodeStatus.ACTIVE,
   })
   status: ReferralCodeStatus;
@@ -19,7 +22,9 @@ export class ReferralCode {
   @Prop()
   userId: number;
 
-  @Prop()
+  @Prop({
+    type: Object,
+  })
   extras: {
     rate: number;
     productId?: string;
