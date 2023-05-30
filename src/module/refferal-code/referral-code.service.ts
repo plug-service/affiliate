@@ -90,6 +90,7 @@ export class ReferralCodeService {
   async update(dto: UpdateReferralCodeDto) {
     const referralCode = dto.referralCode.toUpperCase();
 
+    console.log(dto.id, dto.status, referralCode);
     await this.referralCodeModel.findByIdAndUpdate(dto.id, {
       code: referralCode,
       status: dto.status,

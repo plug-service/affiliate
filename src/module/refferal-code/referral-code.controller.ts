@@ -14,7 +14,7 @@ export class ReferralCodeController {
     type: BasicResponse,
   })
   @ApiOperation({
-    summary: 'Get referral code by user id. Create if not exist',
+    summary: 'Get ACTIVE referral code by user id. Create if not exist',
   })
   @Get('get-by-user-id/:userId')
   async getByUserId(@Param('userId') userId: string) {
@@ -97,7 +97,7 @@ export class ReferralCodeController {
     type: BasicResponse,
   })
   @ApiOperation({
-    summary: 'get referral code information',
+    summary: 'get referral code information if exist and active',
   })
   @Get('/get-referral-code-information/:referralCode')
   async getReferralCodeInformation(
@@ -107,7 +107,7 @@ export class ReferralCodeController {
       referralCode,
     );
     return {
-      status: ResponseStatus.SUCCESS,
+      status: result ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
       data: result,
     };
   }
