@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ReferralCodeModule } from './module/refferal-code/refferal-code.module';
+import { ReferralCodeModule } from './module/referral-code/referral-code.module';
+import { ReferralUserModule } from './module/referral-user/referral-user.module';
 
 function loadModules(): Array<any> {
   const importModule = [
@@ -10,6 +11,7 @@ function loadModules(): Array<any> {
       envFilePath: '.env',
     }),
     ReferralCodeModule,
+    ReferralUserModule,
     MongooseModule.forRoot(
       `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
     ),
