@@ -5,30 +5,53 @@ import {
   ReferralUserStatus,
 } from './schemas/referral-user.schema';
 import { Model } from 'mongoose';
+import { StepResult } from '../basic/basic.dto';
 
 @Injectable()
 export class ReferralUserService {
   @InjectModel(ReferralUser.name)
   private readonly referralUserModel: Model<ReferralUser>;
 
-  async connect(userId: number, referralUserId: number): Promise<boolean> {
+  /**
+   * Return true when the connection between user and referral user exist and active
+   * @param userId
+   * @param referralUserId
+   * @returns
+   */
+  async connect(userId: number, referralUserId: number): Promise<StepResult> {
     const record = await this.referralUserModel.findOne({
-      userId,
+      uId: userId,
       referralId: referralUserId,
     });
 
     if (!record) {
+      // check if this user is has any connection
+      const hasConnection = await this.referralUserModel.findOne({
+        uId: userId,
+      });
+
+      if (hasConnection) {
+        return {
+          isSuccess: false,
+          message: 'User already connected to another referral user',
+        };
+      }
+
       // create new connection
       await this.referralUserModel.create({
         uId: userId,
         referralId: referralUserId,
         status: ReferralUserStatus.ACTIVE,
       });
-      return true;
+      return {
+        isSuccess: true,
+      };
     }
 
     if (record.status === ReferralUserStatus.ACTIVE) {
-      return true;
+      return {
+        isSuccess: true,
+      };
     }
 
     // update status to active
@@ -36,12 +59,29 @@ export class ReferralUserService {
       status: ReferralUserStatus.ACTIVE,
       updatedAt: Date.now(),
     });
-    return true;
+
+    return {
+      isSuccess: true,
+    };
   }
 
-  async disconnect(userId: number, referralUserId: number): Promise<boolean> {
+  async disconnect(
+    userId: number,
+    referralUserId: number,
+    isDelete = false,
+  ): Promise<StepResult> {
+    if (isDelete) {
+      await this.referralUserModel.deleteOne({
+        uId: userId,
+        referralId: referralUserId,
+      });
+      return {
+        isSuccess: true,
+      };
+    }
+
     const record = await this.referralUserModel.findOne({
-      userId,
+      uId: userId,
       referralId: referralUserId,
     });
 
@@ -51,7 +91,9 @@ export class ReferralUserService {
         updatedAt: Date.now(),
       });
     }
-    return true;
+    return {
+      isSuccess: true,
+    };
   }
 
   async getReferralUserId(
@@ -59,7 +101,7 @@ export class ReferralUserService {
     status?: ReferralUserStatus,
   ): Promise<ReferralUser[]> {
     const record = await this.referralUserModel.find({
-      userId,
+      uId: userId,
     });
 
     if (status) {

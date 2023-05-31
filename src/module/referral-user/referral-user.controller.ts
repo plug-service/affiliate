@@ -57,10 +57,11 @@ export class ReferralUserController {
     const result = await this.referralUserService.disconnect(
       dto.userId,
       dto.referralUserId,
+      dto.isDelete,
     );
 
     return {
-      status: result ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
+      status: result.isSuccess ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
     };
   }
 }

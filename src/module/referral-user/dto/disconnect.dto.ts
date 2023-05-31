@@ -9,4 +9,10 @@ export class DisconnectReferralUserDto {
   @ApiProperty()
   @IsNotEmpty()
   userId: number;
+
+  @ApiProperty({
+    default: false,
+  })
+  @IsNotEmpty()
+  isDelete: boolean;
 }
