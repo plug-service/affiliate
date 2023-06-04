@@ -45,6 +45,11 @@ export class Commission {
   tx: Record<string, any>;
 
   @Prop({
+    type: Number,
+  })
+  fromUId: number;
+
+  @Prop({
     type: String,
     default: CommissionStatus.ESTIMATE,
   })

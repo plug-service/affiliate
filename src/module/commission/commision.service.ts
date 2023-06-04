@@ -60,6 +60,7 @@ export class CommissionService {
       commission: commission,
       txType: dto.transactionType,
       tx: dto.transaction,
+      fromUId: uId,
       createdAt: createdAt,
     });
   }
@@ -86,8 +87,6 @@ export class CommissionService {
   ): Promise<boolean> {
     const txId = transaction.id;
 
-    console.log('txId', txId);
-    console.log(transaction);
     const transactionExist = await this.commissionModel.findOne({
       txType: transactionType,
       'tx.id': txId,
