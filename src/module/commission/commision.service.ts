@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { StepResult } from '../basic/basic.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Commission, CommissionStatus } from './schemas/referral-code.schema';
 import { Model } from 'mongoose';
-import { AccountingDto } from './dto/accounting.dto';
+import { AccountingDto, TransactionType } from './dto/accounting.dto';
 import { ReferralUserService } from '../referral-user/referral-user.service';
 import { ReferralUserStatus } from '../referral-user/schemas/referral-user.schema';
+import { ReferralCodeService } from '../referral-code/referral-code.service';
+import { Commission } from './schemas/commission.schema';
 
 @Injectable()
 export class CommissionService {
   @InjectModel(Commission.name)
   private readonly commissionModel: Model<Commission>;
 
-  referralUserService: ReferralUserService;
-  constructor(referralUserService: ReferralUserService) {}
+  constructor(
+    private readonly referralUserService: ReferralUserService,
+    private readonly referralCodeService: ReferralCodeService,
+  ) {}
 
   async accounting(dto: AccountingDto): Promise<Commission> {
     const { transactionType, transaction, uId, createdAt } = dto;
@@ -28,12 +30,33 @@ export class CommissionService {
       return;
     }
 
+    const referralId = referrer.uId;
+    const referralCode = await this.referralCodeService.getByUserId(referralId);
+
+    const commission = await this.calculateCommission(
+      transactionType,
+      transaction,
+      referralCode.extras.rate,
+    );
+
     return await this.commissionModel.create({
-      uId: dto.uId,
-      amount: dto.transaction.amount,
+      uId: referralId,
+      amount: commission,
       transactionType: dto.transactionType,
       transaction: dto.transaction,
-      createdAt: dto.createdAt,
+      createdAt: createdAt,
     });
+  }
+
+  async calculateCommission(
+    transactionType: TransactionType,
+    transaction: Record<string, any>,
+    rate: number,
+  ): Promise<number> {
+    if (transactionType === TransactionType.TOP_UP) {
+      return transaction.amount * rate;
+    }
+
+    return transaction.amount * rate;
   }
 }
