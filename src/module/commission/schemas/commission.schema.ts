@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { TransactionType } from '../dto/accounting.dto';
 
 export enum CommissionStatus {
   ESTIMATE = 'ESTIMATE',
@@ -32,6 +33,11 @@ export class Commission {
     type: Number,
   })
   commission: number;
+
+  @Prop({
+    type: String,
+  })
+  txType: TransactionType;
 
   @Prop({
     type: Object,

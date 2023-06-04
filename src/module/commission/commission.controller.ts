@@ -22,7 +22,7 @@ export class CommissionController {
     const result = await this.commissionService.accounting(dto);
 
     return {
-      status: ResponseStatus.SUCCESS,
+      status: !!result ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
       data: { result },
     };
   }
@@ -40,6 +40,15 @@ export class CommissionController {
     const commissions = await this.commissionService.getCommissionByUserId(
       +userId,
     );
+
+    // rename tx to transaction and txType to transactionType
+
+    commissions.forEach((commission) => {
+      commission['transaction'] = commission.tx;
+      commission['transactionType'] = commission.txType;
+      delete commission.tx;
+      delete commission.txType;
+    });
 
     return {
       status: ResponseStatus.SUCCESS,

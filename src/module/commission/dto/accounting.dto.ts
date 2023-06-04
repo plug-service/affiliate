@@ -8,6 +8,10 @@ export enum TransactionType {
 export class Transaction {
   @ApiProperty()
   @IsNotEmpty()
+  id: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   amount: number;
 
   [key: string]: any;

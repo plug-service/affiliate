@@ -21,8 +21,18 @@ export class CommissionService {
     private readonly referralCodeService: ReferralCodeService,
   ) {}
 
-  async accounting(dto: AccountingDto): Promise<Commission> {
+  async accounting(dto: AccountingDto): Promise<Commission | undefined> {
     const { transactionType, transaction, uId, createdAt } = dto;
+
+    const transactionExist = await this.checkIfTransactionExist(
+      transactionType,
+      transaction,
+    );
+
+    if (transactionExist) {
+      // transaction already exist and commission already calculated
+      return;
+    }
 
     // check if user is a referrer
     const referrer = await this.referralUserService.getUserIdByReferralUserId(
@@ -45,9 +55,11 @@ export class CommissionService {
 
     return await this.commissionModel.create({
       uId: referralId,
-      amount: commission,
-      transactionType: dto.transactionType,
-      transaction: dto.transaction,
+      amount: transaction.amount,
+      rate: referralCode.extras.rate,
+      commission: commission,
+      txType: dto.transactionType,
+      tx: dto.transaction,
       createdAt: createdAt,
     });
   }
@@ -66,5 +78,21 @@ export class CommissionService {
 
   async getCommissionByUserId(userId: number): Promise<Commission[]> {
     return await this.commissionModel.find({ uId: userId });
+  }
+
+  async checkIfTransactionExist(
+    transactionType: TransactionType,
+    transaction: Transaction,
+  ): Promise<boolean> {
+    const txId = transaction.id;
+
+    console.log('txId', txId);
+    console.log(transaction);
+    const transactionExist = await this.commissionModel.findOne({
+      txType: transactionType,
+      'tx.id': txId,
+    });
+
+    return !!transactionExist;
   }
 }
