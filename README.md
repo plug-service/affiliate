@@ -39,5 +39,11 @@ payment: {
 yarn start:dev
 ```
 
+
+## Test
+```
+npm run test:e2e
+```
+
 Then go to `/api`
 

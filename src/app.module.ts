@@ -15,7 +15,9 @@ function loadModules(): Array<any> {
     ReferralUserModule,
     CommissionModule,
     MongooseModule.forRoot(
-      `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
+      process.env.NODE_ENV === 'test'
+        ? `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}_test`
+        : `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
     ),
   ];
 

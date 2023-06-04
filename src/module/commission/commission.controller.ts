@@ -35,7 +35,7 @@ export class CommissionController {
   @ApiOperation({
     summary: 'Get commission by user id',
   })
-  @Get('commission/:userId')
+  @Get(':userId')
   async getMyCommission(@Param('userId') userId: string) {
     const commissions = await this.commissionService.getCommissionByUserId(
       +userId,
