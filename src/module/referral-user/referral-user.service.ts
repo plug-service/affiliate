@@ -96,6 +96,12 @@ export class ReferralUserService {
     };
   }
 
+  /**
+   * 1 user id -> connect with N referral user id
+   * @param userId
+   * @param status
+   * @returns
+   */
   async getReferralUserId(
     userId: number,
     status?: ReferralUserStatus,
@@ -108,5 +114,19 @@ export class ReferralUserService {
       return record.filter((item) => item.status === status);
     }
     return record;
+  }
+
+  async getUserIdByReferralUserId(
+    referralUserId: number,
+    status?: ReferralUserStatus,
+  ): Promise<ReferralUser | undefined> {
+    let record = await this.referralUserModel.find({
+      referralId: referralUserId,
+    });
+
+    if (status) {
+      record = record.filter((item) => item.status === status);
+    }
+    return record?.[0];
   }
 }
