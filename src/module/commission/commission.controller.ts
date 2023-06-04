@@ -26,4 +26,24 @@ export class CommissionController {
       data: { result },
     };
   }
+
+  @ApiTags('commission')
+  @ApiResponse({
+    status: 200,
+    type: BasicResponse,
+  })
+  @ApiOperation({
+    summary: 'Get commission by user id',
+  })
+  @Get('commission/:userId')
+  async getMyCommission(@Param('userId') userId: string) {
+    const commissions = await this.commissionService.getCommissionByUserId(
+      +userId,
+    );
+
+    return {
+      status: ResponseStatus.SUCCESS,
+      data: commissions,
+    };
+  }
 }

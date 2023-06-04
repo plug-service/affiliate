@@ -48,7 +48,7 @@ export class CommissionService {
     });
   }
 
-  async calculateCommission(
+  private async calculateCommission(
     transactionType: TransactionType,
     transaction: Record<string, any>,
     rate: number,
@@ -58,5 +58,9 @@ export class CommissionService {
     }
 
     return transaction.amount * rate;
+  }
+
+  async getCommissionByUserId(userId: number): Promise<Commission[]> {
+    return await this.commissionModel.find({ uId: userId });
   }
 }
