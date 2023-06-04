@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ReferralCodeModule } from './module/referral-code/referral-code.module';
 import { ReferralUserModule } from './module/referral-user/referral-user.module';
+import { CommissionModule } from './module/commission/commission.module';
 
 function loadModules(): Array<any> {
   const importModule = [
@@ -12,8 +13,11 @@ function loadModules(): Array<any> {
     }),
     ReferralCodeModule,
     ReferralUserModule,
+    CommissionModule,
     MongooseModule.forRoot(
-      `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
+      process.env.NODE_ENV === 'test'
+        ? `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}_test`
+        : `mongodb://${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}`,
     ),
   ];
 

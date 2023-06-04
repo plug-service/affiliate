@@ -10,8 +10,8 @@ async function bootstrap() {
   const port = process.env.NEST_PORT || 3000;
 
   const config = new DocumentBuilder()
-    .setTitle('Notification Service')
-    .setDescription('Microservice for notification')
+    .setTitle('Affiliate Service')
+    .setDescription('Microservice for affiliate system')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
