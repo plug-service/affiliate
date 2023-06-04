@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AccountingDto, TransactionType } from './dto/accounting.dto';
+import {
+  AccountingDto,
+  Transaction,
+  TransactionType,
+} from './dto/accounting.dto';
 import { ReferralUserService } from '../referral-user/referral-user.service';
 import { ReferralUserStatus } from '../referral-user/schemas/referral-user.schema';
 import { ReferralCodeService } from '../referral-code/referral-code.service';
@@ -50,7 +54,7 @@ export class CommissionService {
 
   private async calculateCommission(
     transactionType: TransactionType,
-    transaction: Record<string, any>,
+    transaction: Transaction,
     rate: number,
   ): Promise<number> {
     if (transactionType === TransactionType.TOP_UP) {
