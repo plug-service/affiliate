@@ -21,7 +21,7 @@ module.exports = {
     production: {
       user: 'root',
       path: '/var/www/affiliate',
-      repo: 'git@github.com:plug-service/notification.git',
+      repo: 'git@github.com:plug-service/affiliate.git',
       'post-deploy': 'yarn install && yarn build && pm2 start --env production', // --env use env_production above
       host: '157.230.245.190',
       ref: 'origin/master',
