@@ -5,7 +5,7 @@ module.exports = {
       script: './dist/main.js', // use for pm2 start
       log_date_format: 'YYYY-MM-DD HH:mm Z',
       env_production: {
-        NEST_PORT: 4000,
+        NEST_PORT: 4100,
         NODE_ENV: 'production',
 
         MONGO_URL: '127.0.0.1:27017',
