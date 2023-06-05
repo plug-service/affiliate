@@ -8,7 +8,7 @@ module.exports = {
         NEST_PORT: 4000,
         NODE_ENV: 'production',
 
-        MONGO_URL: 'localhost',
+        MONGO_URL: '127.0.0.1:27017',
         MONGO_DB_NAME: 'affiliate',
 
         MIN_LENGTH_REFERRAL_CODE: 3,
