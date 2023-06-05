@@ -10,6 +10,10 @@ module.exports = {
 
         MONGO_URL: 'localhost',
         MONGO_DB_NAME: 'affiliate',
+
+        MIN_LENGTH_REFERRAL_CODE: 3,
+        MAX_LENGTH_REFERRAL_CODE: 15,
+        DEFAULT_REFERRAL_CODE_RATE: 0.2,
       },
     },
   ],
