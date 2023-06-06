@@ -34,6 +34,13 @@ export class ReferralUserController {
       };
     }
 
+    if (referral.userId === dto.referralUserId) {
+      return {
+        status: ResponseStatus.FAIL,
+        message: 'Cannot connect to yourself',
+      };
+    }
+
     const result = await this.referralUserService.connect(
       referral.userId,
       dto.referralUserId,
@@ -41,6 +48,7 @@ export class ReferralUserController {
 
     return {
       status: result ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
+      message: result?.message,
     };
   }
 
