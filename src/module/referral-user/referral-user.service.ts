@@ -14,20 +14,23 @@ export class ReferralUserService {
 
   /**
    * Return true when the connection between user and referral user exist and active
-   * @param userId
+   * @param hostUserId
    * @param referralUserId
    * @returns
    */
-  async connect(userId: number, referralUserId: number): Promise<StepResult> {
+  async connect(
+    hostUserId: number,
+    referralUserId: number,
+  ): Promise<StepResult> {
     const record = await this.referralUserModel.findOne({
-      uId: userId,
+      uId: hostUserId,
       referralId: referralUserId,
     });
 
     if (!record) {
       // check if this user is has any connection
       const hasConnection = await this.referralUserModel.findOne({
-        uId: userId,
+        uId: referralUserId,
       });
 
       if (hasConnection) {
@@ -39,7 +42,7 @@ export class ReferralUserService {
 
       // create new connection
       await this.referralUserModel.create({
-        uId: userId,
+        uId: hostUserId,
         referralId: referralUserId,
         status: ReferralUserStatus.ACTIVE,
       });
