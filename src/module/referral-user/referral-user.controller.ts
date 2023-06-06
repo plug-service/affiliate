@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BasicResponse, ResponseStatus } from '../basic/basic.dto';
 import { ReferralUserService } from './referral-user.service';
@@ -58,7 +58,7 @@ export class ReferralUserController {
     type: BasicResponse,
   })
   @ApiOperation({
-    summary: 'get referral user information if exist and active',
+    summary: 'Disconnect referral user to user',
   })
   @Post('/disconnect')
   async disconnect(@Body() dto: DisconnectReferralUserDto) {
@@ -70,6 +70,24 @@ export class ReferralUserController {
 
     return {
       status: result.isSuccess ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
+    };
+  }
+
+  @ApiTags('referral-user')
+  @ApiResponse({
+    status: 200,
+    type: BasicResponse,
+  })
+  @ApiOperation({
+    summary: 'get referral user information if exist and active',
+  })
+  @Get('/list-referral-user/:userId')
+  async getListReferralUser(@Param('userId') userId: string) {
+    const result = await this.referralUserService.getReferralUserId(+userId);
+
+    return {
+      status: ResponseStatus.SUCCESS,
+      data: result,
     };
   }
 }
