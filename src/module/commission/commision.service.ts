@@ -21,6 +21,12 @@ export class CommissionService {
     private readonly referralCodeService: ReferralCodeService,
   ) {}
 
+  /**
+   * Return Commission in case of a commission is accounted
+   * If not, return undefined
+   * @param dto
+   * @returns
+   */
   async accounting(dto: AccountingDto): Promise<Commission | undefined> {
     const { transactionType, transaction, uId, createdAt } = dto;
 
