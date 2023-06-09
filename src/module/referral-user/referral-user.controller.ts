@@ -49,6 +49,10 @@ export class ReferralUserController {
     return {
       status: result ? ResponseStatus.SUCCESS : ResponseStatus.FAIL,
       message: result?.message,
+      data: {
+        hostUserId: referral.userId,
+        referralUserId: dto.referralUserId,
+      },
     };
   }
 
